@@ -1,0 +1,39 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: greeter-api
+spec:
+  runLatest:
+    configuration:
+      build:
+        serviceAccountName: builder
+        source:
+          git:
+            url: http://gogs-infra.192.168.64.27.nip.io/kameshs/greeter
+            revision: master
+        template:
+          name: java-native
+          arguments:
+            - name: IMAGE_NAME
+              value: "greeter-api:0.0.1"
+            - name: CONTEXT_DIR
+              value: "greeter-api"
+            - name: JAVA_APP_NAME
+              value: "greeter-api-runner"
+            - name: CACHE
+              value: m2-cache
+        volumes:
+          - name: m2-cache
+            persistentVolumeClaim:
+              claimName: m2-cache
+      revisionTemplate:
+        metadata:
+          labels:
+            app: greeter-api
+          annotations:
+            alpha.image.policy.openshift.io/resolve-names: "*"
+        spec:
+          container:
+            # This should be a fully qualified domain name e.g. quay.io/example/myimage:mytag
+            # This is configured to use the inbuilt default docker registry
+            image: docker-registry.default.svc:5000/myproject/greeter-api:0.0.1
