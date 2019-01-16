@@ -24,37 +24,42 @@ spec:
     - name: BUILDAH_SCRIPT
       description: The name of buildah script that will be used to build OCI container
       default: buildah.sh
+    - name: MAVEN_MIRROR_URL
+      description: The maven mirror url that can used 
 
   steps:
     - name: build-setup
       image: ${JAVA_APP_BUILDER_IMAGE}
-      args:
-        - clean 
-        - -N 
-        - install
+      args: ["mvn","clean","-N","install"]
+      env:
+        - name: MAVEN_MIRROR_URL
+          value: ${MAVEN_MIRROR_URL}
       volumeMounts:
         - name: ${CACHE}
-          mountPath: /opt/jboss
-          subpath: .m2
+          mountPath: /usr/share/maven/ref
+          subpath: repository
     - name: build-app
       image: ${JAVA_APP_BUILDER_IMAGE}
-      args:
-        - package
-        - install
+      workingDir: /workspace
+      args: ["mvn","install"]
+      env:
+        - name: MAVEN_MIRROR_URL
+          value: ${MAVEN_MIRROR_URL}
       volumeMounts:
         - name: ${CACHE}
-          mountPath: /opt/jboss
-          subpath: .m2
+          mountPath: /usr/share/maven/ref
+          subpath: repository
     - name: build-java-native
       image: ${JAVA_APP_BUILDER_IMAGE}
       workingDir: /workspace/${CONTEXT_DIR}
-      args:
-        - package 
-        - -Pnative
+      args: ["mvn","package","-Pnative"]
+      env:
+        - name: MAVEN_MIRROR_URL
+          value: ${MAVEN_MIRROR_URL}
       volumeMounts:
         - name: ${CACHE}
-          mountPath: /opt/jboss
-          subpath: .m2
+          mountPath:  /usr/share/maven/ref
+          subpath: repository
     - name: build-container-push
       image: ${BUILDER_IMAGE}
       workingDir: /workspace/${CONTEXT_DIR}
