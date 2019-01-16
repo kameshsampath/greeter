@@ -10,11 +10,11 @@
   <artifactId>greeter-api</artifactId>
   <name>greeter-api</name>
   <dependencies>
-    <!--dependency>
+    <dependency>
       <groupId>com.example</groupId>
       <artifactId>greeter-service</artifactId>
       <version>1.0-SNAPSHOT</version>
-    </dependency-->
+    </dependency>
     <dependency>
       <groupId>org.jboss.shamrock</groupId>
       <artifactId>shamrock-jaxrs-deployment</artifactId>
