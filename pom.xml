@@ -55,7 +55,7 @@
         </pluginRepository>
     </pluginRepositories>
     <modules>
-        <module>greeter-service</module>
         <module>greeter-api</module>
+        <module>greeter-service</module>
     </modules>
 </project>
