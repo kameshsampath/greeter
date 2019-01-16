@@ -26,11 +26,29 @@ spec:
       default: buildah.sh
 
   steps:
+    - name: build-setup
+      image: ${JAVA_APP_BUILDER_IMAGE}
+      args:
+        - clean 
+        - -N 
+        - install
+      volumeMounts:
+        - name: ${CACHE}
+          mountPath: /opt/jboss
+          subpath: .m2
     - name: build-app
       image: ${JAVA_APP_BUILDER_IMAGE}
       args:
         - clean
         - install
+      volumeMounts:
+        - name: ${CACHE}
+          mountPath: /opt/jboss
+          subpath: .m2
+    - name: build-java-native
+      image: ${JAVA_APP_BUILDER_IMAGE}
+      workingDir: /workspace/${CONTEXT_DIR}
+      args:
         - -Pnative
       volumeMounts:
         - name: ${CACHE}
