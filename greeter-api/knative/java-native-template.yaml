@@ -39,7 +39,7 @@ spec:
     - name: build-app
       image: ${JAVA_APP_BUILDER_IMAGE}
       args:
-        - clean
+        - package
         - install
       volumeMounts:
         - name: ${CACHE}
@@ -49,6 +49,7 @@ spec:
       image: ${JAVA_APP_BUILDER_IMAGE}
       workingDir: /workspace/${CONTEXT_DIR}
       args:
+        - package 
         - -Pnative
       volumeMounts:
         - name: ${CACHE}
