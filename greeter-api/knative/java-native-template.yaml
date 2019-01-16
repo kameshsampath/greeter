@@ -30,7 +30,7 @@ spec:
       image: ${JAVA_APP_BUILDER_IMAGE}
       args:
         - clean
-        - package
+        - install
         - -Pnative
       volumeMounts:
         - name: ${CACHE}
