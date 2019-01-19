@@ -24,7 +24,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <!-- repositories>
+    <repositories>
         <repository>
             <id>Protean-release</id>
             <name>Protean - Releases</name>
@@ -53,7 +53,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
-    </pluginRepositories -->
+    </pluginRepositories>
     <modules>
         <module>greeter-service</module>
         <module>greeter-api</module>
