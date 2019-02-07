@@ -10,7 +10,7 @@ spec:
     - name: JAVA_APP_NAME
       description: The jar file name of the build artifact
     - name: BUILDER_IMAGE
-      description: The builder image to build the OCI container 
+      description: The builder image to build the OCI container
       default: quay.io/workspace7/buildah
     - name: IMAGE_NAME
       description: The name of the image to build and push, you can use %a for artifact id from pom.xml and %v for version from pom.xml and %g for group from pom.xml
@@ -25,56 +25,54 @@ spec:
       description: The name of buildah script that will be used to build OCI container
       default: buildah.sh
     - name: MAVEN_MIRROR_URL
-      description: The maven mirror url that can used 
+      description: The maven mirror url that can used
+      default: ""
 
   steps:
     - name: build-setup
       image: ${JAVA_APP_BUILDER_IMAGE}
-      args: ["mvn","clean","-N","install"]
+      args: ["mvn", "clean", "-N", "install"]
       env:
         - name: MAVEN_MIRROR_URL
           value: ${MAVEN_MIRROR_URL}
       volumeMounts:
         - name: ${CACHE}
           mountPath: /usr/share/maven/ref
-          subpath: repository
     - name: build-app
       image: ${JAVA_APP_BUILDER_IMAGE}
       workingDir: /workspace
-      args: ["mvn","install"]
+      args: ["mvn", "install"]
       env:
         - name: MAVEN_MIRROR_URL
           value: ${MAVEN_MIRROR_URL}
       volumeMounts:
         - name: ${CACHE}
           mountPath: /usr/share/maven/ref
-          subpath: repository
     - name: build-java-native
       image: ${JAVA_APP_BUILDER_IMAGE}
       workingDir: /workspace/${CONTEXT_DIR}
-      args: ["mvn","package","-Pnative"]
+      args: ["mvn", "package", "-Pnative"]
       env:
         - name: MAVEN_MIRROR_URL
           value: ${MAVEN_MIRROR_URL}
       volumeMounts:
         - name: ${CACHE}
-          mountPath:  /usr/share/maven/ref
-          subpath: repository
+          mountPath: /usr/share/maven/ref
     - name: build-container-push
       image: ${BUILDER_IMAGE}
       workingDir: /workspace/${CONTEXT_DIR}
-      args: ["bash","-c","/workspace/${CONTEXT_DIR}/${BUILDAH_SCRIPT}"]
+      args: ["bash", "-c", "/workspace/${CONTEXT_DIR}/${BUILDAH_SCRIPT}"]
       env:
-      - name: CONTEXT_DIR
-        value: "${CONTEXT_DIR}"
-      - name: IMAGE_NAME
-        value: "${IMAGE_NAME}"
-      - name: JAVA_APP_NAME
-        value: "${JAVA_APP_NAME}"
-      - name: POD_NAMESPACE
-        valueFrom:
-          fieldRef:
-            fieldPath: metadata.namespace
+        - name: CONTEXT_DIR
+          value: "${CONTEXT_DIR}"
+        - name: IMAGE_NAME
+          value: "${IMAGE_NAME}"
+        - name: JAVA_APP_NAME
+          value: "${JAVA_APP_NAME}"
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
 
   volumes:
     - name: empty-dir-volume
