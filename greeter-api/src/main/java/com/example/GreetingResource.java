@@ -13,6 +13,10 @@ public class GreetingResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello(@PathParam("name") String name) {
         Greeter greeter = new Greeter();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
         return greeter.sayHello(name, null);
     }
 }
