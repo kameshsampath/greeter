@@ -1,5 +1,6 @@
 package com.example;
 
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -14,7 +15,7 @@ public class GreetingResource {
     public String hello(@PathParam("name") String name) {
         Greeter greeter = new Greeter();
         try {
-            Thread.sleep(100);
+            TimeUnit.SECONDS.sleep(3);
         } catch (InterruptedException e) {
         }
         return greeter.sayHello(name, null);
