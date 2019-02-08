@@ -6,7 +6,7 @@ spec:
   parameters:
     - name: JAVA_APP_BUILDER_IMAGE
       description: The builder image used to build the java application
-      default: "quay.io/workspace7/java-builder:0.0.2"
+      default: "quay.io/workspace7/java-builder:master"
     - name: JAVA_APP_NAME
       description: The jar file name of the build artifact
     - name: BUILDER_IMAGE
@@ -38,6 +38,17 @@ spec:
       volumeMounts:
         - name: ${CACHE}
           mountPath: /usr/share/maven/ref
+          subpath: repository
+    - name: verify-m2-repo
+      args:
+        - ls
+        - -ll
+        - /usr/share/maven/ref/repository
+      image: busybox
+      volumeMounts:
+        - name: ${CACHE}
+          mountPath: /usr/share/maven/ref
+          subpath: repository
     - name: build-app
       image: ${JAVA_APP_BUILDER_IMAGE}
       workingDir: /workspace
@@ -48,6 +59,7 @@ spec:
       volumeMounts:
         - name: ${CACHE}
           mountPath: /usr/share/maven/ref
+          subpath: repository
     - name: build-java-native
       image: ${JAVA_APP_BUILDER_IMAGE}
       workingDir: /workspace/${CONTEXT_DIR}
@@ -58,6 +70,7 @@ spec:
       volumeMounts:
         - name: ${CACHE}
           mountPath: /usr/share/maven/ref
+          subpath: repository
     - name: build-container-push
       image: ${BUILDER_IMAGE}
       workingDir: /workspace/${CONTEXT_DIR}

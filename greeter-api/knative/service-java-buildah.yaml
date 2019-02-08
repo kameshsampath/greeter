@@ -7,6 +7,7 @@ spec:
     configuration:
       build:
         serviceAccountName: builder
+        timeout: "30m"
         source:
           git:
             url: git@github.com:kameshsampath/greeter
@@ -37,3 +38,9 @@ spec:
             # This should be a fully qualified domain name e.g. quay.io/example/myimage:mytag
             # This is configured to use the inbuilt default docker registry
             image: docker-registry.default.svc:5000/myproject/greeter-api:0.0.1
+            livenessProbe:
+              httpGet:
+                path: /healthz
+            readinessProbe:
+              httpGet:
+                path: /healthz
