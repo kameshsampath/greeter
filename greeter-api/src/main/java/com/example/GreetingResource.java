@@ -15,7 +15,7 @@ public class GreetingResource {
     public String hello(@PathParam("name") String name) {
         Greeter greeter = new Greeter();
         try {
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);\
         } catch (InterruptedException e) {
         }
         return greeter.sayHello(name, null);
