@@ -1,12 +1,12 @@
 apiVersion: build.knative.dev/v1alpha1
 kind: BuildTemplate
 metadata:
-  name: java-native
+  name: java-native-buildah
 spec:
   parameters:
     - name: JAVA_APP_BUILDER_IMAGE
       description: The builder image used to build the java application
-      default: "quay.io/workspace7/java-builder"
+      default: "quay.io/workspace7/java-builder:0.0.2"
     - name: JAVA_APP_NAME
       description: The jar file name of the build artifact
     - name: BUILDER_IMAGE

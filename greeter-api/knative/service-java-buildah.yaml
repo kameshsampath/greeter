@@ -12,7 +12,7 @@ spec:
             url: git@github.com:kameshsampath/greeter
             revision: master
         template:
-          name: java-native
+          name: java-native-buildah
           arguments:
             - name: IMAGE_NAME
               value: "greeter-api:0.0.1"
